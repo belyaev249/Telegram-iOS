@@ -22,6 +22,11 @@ typedef NS_ENUM(NSUInteger, FFMpegAVFramePixelFormat) {
 @property (nonatomic, readonly) int64_t duration;
 @property (nonatomic, readonly) FFMpegAVFrameColorRange colorRange;
 @property (nonatomic, readonly) FFMpegAVFramePixelFormat pixelFormat;
+@property (nonatomic, readonly) int32_t sampleRate;
+@property (nonatomic, readonly) int64_t bestEffortTimestamp;
+@property (nonatomic, readonly) int64_t pktDts;
+@property (nonatomic, readonly) int32_t nbSamples;
+@property (nonatomic, readonly) int32_t format;
 
 - (instancetype)init;
 - (instancetype)initWithPixelFormat:(FFMpegAVFramePixelFormat)pixelFormat width:(int32_t)width height:(int32_t)height;

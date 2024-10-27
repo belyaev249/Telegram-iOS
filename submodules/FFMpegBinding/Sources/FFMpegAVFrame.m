@@ -64,6 +64,26 @@
     return _impl->pts;
 }
 
+- (int32_t)sampleRate {
+    return _impl->sample_rate;
+}
+
+- (int64_t)bestEffortTimestamp {
+    return _impl->best_effort_timestamp;
+}
+
+- (int64_t)pktDts {
+    return _impl->pkt_dts;
+}
+
+- (int32_t)nbSamples {
+    return _impl->nb_samples;
+}
+
+- (int32_t)format {
+    return _impl->format;
+}
+
 - (int64_t)duration {
 #if LIBAVFORMAT_VERSION_MAJOR >= 59
     return _impl->duration;

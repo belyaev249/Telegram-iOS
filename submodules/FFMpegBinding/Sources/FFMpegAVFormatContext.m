@@ -51,9 +51,37 @@ int FFMpegCodecIdVP9 = AV_CODEC_ID_VP9;
     return result >= 0;
 }
 
+- (bool)openInput:(NSString *)srcPath {
+    if (_impl != nil) {
+        _impl->flags |= AVFMT_FLAG_FAST_SEEK;
+        _impl->flags |= AVFMT_FLAG_NOBUFFER;
+    }
+    AVDictionary *options = NULL;
+    av_dict_set(&options, "copyts", "1", 0);
+    int result = avformat_open_input(&_impl, [srcPath UTF8String], nil, &options);
+    av_dict_free(&options);
+    return result >= 0;
+}
+
 - (bool)findStreamInfo {
     int result = avformat_find_stream_info(_impl, nil);
     return result >= 0;
+}
+
+- (int32_t)findBestStream:(FFMpegAVFormatStreamType)type {
+    enum AVMediaType mediaType;
+    switch(type) {
+        case FFMpegAVFormatStreamTypeAudio:
+            mediaType = AVMEDIA_TYPE_AUDIO;
+            break;
+        case FFMpegAVFormatStreamTypeVideo:
+            mediaType = AVMEDIA_TYPE_VIDEO;
+            break;
+        default:
+            mediaType = AVMEDIA_TYPE_VIDEO;
+            break;
+    }
+    return av_find_best_stream(_impl, mediaType, -1, -1, nil, -1);
 }
 
 - (void)seekFrameForStreamIndex:(int32_t)streamIndex pts:(int64_t)pts positionOnKeyframe:(bool)positionOnKeyframe {
@@ -89,6 +117,23 @@ int FFMpegCodecIdVP9 = AV_CODEC_ID_VP9;
         }
     }
     return indices;
+}
+
+- (int64_t)startTimeAtStreamIndex:(int32_t)streamIndex {
+    return _impl->streams[streamIndex]->start_time;
+}
+
+- (CMTime)fpsAtStreamIndex:(int32_t)streamIndex {
+    AVStream *stream = _impl->streams[streamIndex];
+    CMTime fps;
+    if (stream->avg_frame_rate.den != 0 && stream->avg_frame_rate.num != 0) {
+        fps = CMTimeMake((int64_t)stream->avg_frame_rate.num, stream->avg_frame_rate.den);
+    } else if (stream->r_frame_rate.den != 0 && stream->r_frame_rate.num != 0) {
+        fps = CMTimeMake((int64_t)stream->r_frame_rate.num, stream->r_frame_rate.den);
+    } else {
+        fps = CMTimeMake(1, 24);
+    }
+    return fps;
 }
 
 - (bool)isAttachedPicAtStreamIndex:(int32_t)streamIndex {
@@ -153,6 +198,10 @@ int FFMpegCodecIdVP9 = AV_CODEC_ID_VP9;
 - (void)forceVideoCodecId:(int)videoCodecId {
     _impl->video_codec_id = videoCodecId;
     _impl->video_codec = avcodec_find_decoder(videoCodecId);
+}
+
+- (void *)impl {
+    return _impl;
 }
 
 @end

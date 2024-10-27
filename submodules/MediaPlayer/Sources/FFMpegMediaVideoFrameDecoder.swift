@@ -121,6 +121,8 @@ public final class FFMpegMediaVideoFrameDecoder: MediaTrackFrameDecoder {
             return .moreDataNeeded
         case .error:
             return .error
+        case .endOfFrame:
+            return .error
         @unknown default:
             return .error
         }

@@ -214,11 +214,7 @@ public final class HLSVideoContent: UniversalVideoContent {
     }
     
     public func makeContentNode(accountId: AccountRecordId, postbox: Postbox, audioSession: ManagedAudioSession) -> UniversalVideoContentNode & ASDisplayNode {
-        if #available(iOS 17.1, *) {
-            return HLSVideoJSContentNode(accountId: accountId, postbox: postbox, audioSessionManager: audioSession, userLocation: self.userLocation, fileReference: self.fileReference, streamVideo: self.streamVideo, loopVideo: self.loopVideo, enableSound: self.enableSound, baseRate: self.baseRate, fetchAutomatically: self.fetchAutomatically)
-        } else {
-            return HLSVideoAVContentNode(accountId: accountId, postbox: postbox, audioSessionManager: audioSession, userLocation: self.userLocation, fileReference: self.fileReference, streamVideo: self.streamVideo, loopVideo: self.loopVideo, enableSound: self.enableSound, baseRate: self.baseRate, fetchAutomatically: self.fetchAutomatically)
-        }
+        HLSVideoNativeContentNode(accountId: accountId, postbox: postbox, audioSessionManager: audioSession, userLocation: self.userLocation, fileReference: self.fileReference, streamVideo: self.streamVideo, loopVideo: self.loopVideo, enableSound: self.enableSound, baseRate: self.baseRate, fetchAutomatically: self.fetchAutomatically)
     }
     
     public func isEqual(to other: UniversalVideoContent) -> Bool {
@@ -434,6 +430,7 @@ final class HLSServerSource: SharedHLSServer.Source {
             )
             
             #if DEBUG
+            print("Fetching \(quality)p part started")
             let startTime = CFAbsoluteTimeGetCurrent()
             #endif
             

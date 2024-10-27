@@ -9,6 +9,7 @@ typedef NS_ENUM(NSUInteger, FFMpegAVCodecContextReceiveResult)
     FFMpegAVCodecContextReceiveResultError,
     FFMpegAVCodecContextReceiveResultNotEnoughData,
     FFMpegAVCodecContextReceiveResultSuccess,
+    FFMpegAVCodecContextReceiveResultEndOfFrame
 };
 
 @class FFMpegAVCodec;

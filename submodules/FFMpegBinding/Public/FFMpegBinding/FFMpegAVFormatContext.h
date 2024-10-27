@@ -37,7 +37,10 @@ extern int FFMpegCodecIdVP9;
 
 - (void)setIOContext:(FFMpegAVIOContext *)ioContext;
 - (bool)openInput;
+- (bool)openInput:(NSString *)srcPath;;
+
 - (bool)findStreamInfo;
+- (int32_t)findBestStream:(FFMpegAVFormatStreamType)type;
 - (void)seekFrameForStreamIndex:(int32_t)streamIndex pts:(int64_t)pts positionOnKeyframe:(bool)positionOnKeyframe;
 - (bool)readFrameIntoPacket:(FFMpegPacket *)packet;
 - (NSArray<NSNumber *> *)streamIndicesForType:(FFMpegAVFormatStreamType)type;
@@ -45,11 +48,14 @@ extern int FFMpegCodecIdVP9;
 - (int)codecIdAtStreamIndex:(int32_t)streamIndex;
 - (double)duration;
 - (int64_t)durationAtStreamIndex:(int32_t)streamIndex;
+- (int64_t)startTimeAtStreamIndex:(int32_t)streamIndex;
+- (CMTime)fpsAtStreamIndex:(int32_t)streamIndex;
 - (bool)codecParamsAtStreamIndex:(int32_t)streamIndex toContext:(FFMpegAVCodecContext *)context;
 - (FFMpegFpsAndTimebase)fpsAndTimebaseForStreamIndex:(int32_t)streamIndex defaultTimeBase:(CMTime)defaultTimeBase;
 - (FFMpegStreamMetrics)metricsForStreamAtIndex:(int32_t)streamIndex;
 
 - (void)forceVideoCodecId:(int)videoCodecId;
+- (void *)impl;
 
 @end
 

@@ -37,6 +37,10 @@
     }
 }
 
+- (int64_t)pos {
+    return _impl->pos;
+}
+
 - (int64_t)dts {
     return _impl->dts;
 }
@@ -59,6 +63,10 @@
 
 - (int32_t)sendToDecoder:(FFMpegAVCodecContext *)codecContext {
     return avcodec_send_packet((AVCodecContext *)[codecContext impl], _impl);
+}
+
+- (void)unref {
+    av_packet_unref(_impl);
 }
 
 @end

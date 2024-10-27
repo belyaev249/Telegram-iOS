@@ -66,6 +66,8 @@
         return FFMpegAVCodecContextReceiveResultSuccess;
     } else if (status == -35) {
         return FFMpegAVCodecContextReceiveResultNotEnoughData;
+    } else if (status == -541478725) {
+        return FFMpegAVCodecContextReceiveResultEndOfFrame;
     } else {
         return FFMpegAVCodecContextReceiveResultError;
     }
